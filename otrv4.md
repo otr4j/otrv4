@@ -1331,7 +1331,7 @@ variable `l` should refer to `j` (for sending) and `k` (for receiving).
 derive_ratchet_keys(purpose, prev_root_key, K):
   curr_root_key = KDF(usage_root_key || prev_root_key || K, 64)
   chain_key_purpose[l] = KDF(usage_chain_key || prev_root_key || K, 64)
-  return curr_root_key, chain_key_purpose[i]
+  return curr_root_key, chain_key_purpose[l]
 ```
 
 ### Calculating Encryption and MAC Keys
