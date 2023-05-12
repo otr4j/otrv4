@@ -2009,6 +2009,8 @@ denoted `Fa` for Alice's, and `Fb` for Bob's.
 
 #### Interactive DAKE Overview
 
+`FIXME descriptions will be clearer if we forego use of our_ecdh/our_dh/their_ecdh/their_dh and just speak in terms of A, B, X, Y, aliceFirstECDH, bobFirstECDH, etc. The steps of the protocol are already described in phases as executed by Alice/Bob, so the additional level of indirection (aliasing of keys) is unnecessary.`
+
 ```
 Alice                                           Bob
 ---------------------------------------------------
@@ -2047,7 +2049,8 @@ Bob will be initiating the DAKE with Alice.
    the [Auth-R Message](#auth-r-message) section.
 1. Sets `X` and `x` as `our_ecdh`: the ephemeral ECDH keys.
 1. Sets `A` and `a` as `our_dh`: the ephemeral 3072-bit DH keys.
-1. Calculates the Mixed shared secret (`K`) and the SSID:
+1. Calculates the Mixed shared secret (`K`) and the SSID:  
+   `FIXME item below instructs securely deleting public keys used as A and X. This is not yet possible, because we still need to verify the ring signature, which requires B, Y, A and X to be present.`
     * Calculates ECDH shared secret
       `K_ecdh = ECDH(our_ecdh.secret, their_ecdh)`. Securely deletes
       `our_ecdh.secret`, `our_ecdh.public` and `their_ecdh`. Replaces them with:
@@ -4009,9 +4012,12 @@ If the state is `WAITING_AUTH_I`:
   ```
 
   * Validate the Identity message. Notice that this Identity message should have
-    the 'Receiver's instance tag'. Validate that that value is equal to your 'Sender's instance tag'.
-    Ignore the message if any of the validations fails.
+    the 'Receiver's instance tag'. Validate that that value is equal to your
+    'Sender's instance tag'. Ignore the message if any of the validations fails.
   * If validation succeeds:
+    * Forget the old `our_ecdh`, `our_dh`, `our_ecdh_first.public` and
+      `our_dh_first.public` values that you generated earlier, as we previously
+      cleared the key material.
     * Forget the old `their_ecdh`, `their_dh`, `their_ecdh_first`,
       `their_dh_first` and Client Profile from the previously received Identity
       message.
