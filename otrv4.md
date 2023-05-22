@@ -4238,6 +4238,10 @@ If the version is 3:
         keys for this correspondent, and transition msgstate to
         `MSGSTATE_FINISHED`.
 
+`FIXME note that this does not explain what to do with remaining MK_MAC keys to be revealed. The sender of the TLV Type 1 disconnect message has the opportunity to reveal. The receiver does not. It is possible -- within the protocol as it is described -- to send the remaining MACs in a message that has the IGNORE_UNREADABLE flag set. That way all MK_MAC keys are revealed. Especially given that the person issuing the 'disconnect' is the one affected by the fact that receiver's MK_MACs aren't revealed.`
+
+*
+  *
     * Otherwise, inform the user that an unreadable encrypted message was
       received, and reply with an Error Message, as defined in OTRv3 protocol.
 
