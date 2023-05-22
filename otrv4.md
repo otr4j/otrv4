@@ -1163,6 +1163,13 @@ Key variables:
     excessive recipient computation.
 ```
 
+`FIXME revealing all stored MK_MACs in the next ratchet, means that MK_MACs from
+received messages are revealed with next sender keys rotation, meaning that the
+other party may still be actively using the original ratchet for sending messages
+as long as our first sent message (that reveals the existing MACs) has not yet
+been received. (After receiving, the other party will rotate away using our
+public keys.)`
+
 Depending on the event, the state variables are incremented and some key
 variable values are replaced:
 
@@ -3329,7 +3336,7 @@ The decryption mechanism works as:
         decrypted_message = ChaCha20_Dec(MKenc, nonce, m)
       ```
 
-    * If sucessful, securely delete `MKenc` and `extra_symm_key` (if not
+    * If successful, securely delete `MKenc` and `extra_symm_key` (if not
       needed). Add `MKmac` to the list `mac_keys_to_reveal`. Otherwise,
       delete `MKmac`.
     * Securely delete `skipped_MKenc[Public ECDH Key, message_id]`.
