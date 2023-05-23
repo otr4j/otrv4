@@ -8,6 +8,10 @@ This protocol specification is a draft. It's currently under constant revision.
 
 `FIXME consider that i, j, k control the ratchet, and also we rely on i, k for determining the authenticator. We need to be aware that the authenticator can be verified only after ratcheting. Therefore, ratcheting must be reversible (or predictive) otherwise we cannot mitigate false/fabricated messages.`
 
+`TODO existing problem: encoding to be used within message payload is unaddressed. The result is that some chat protocols, which might support multiple formats, take an arbitrary decision. In addition, some of these protocols do support indicating the format, e.g. by MIME type, but this holds for the raw transport layer, i.e. the transport over which the OTR-encoded message travels.`
+
+`TODO Phi+ does not describe how the Phi value should be extended with transport protocol specific values to be verified.`
+
 This document describes version 4 of the Off-the-Record Messaging protocol.
 OTR version 4 (OTRv4) provides better deniability properties by the use of a
 deniable authenticated key exchange (DAKE), and better forward secrecy through
