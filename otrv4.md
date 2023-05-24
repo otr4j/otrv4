@@ -6,11 +6,11 @@ Disclaimer
 This protocol specification is a draft. It's currently under constant revision.
 ```
 
-`FIXME consider that i, j, k control the ratchet, and also we rely on i, k for determining the authenticator. We need to be aware that the authenticator can be verified only after ratcheting. Therefore, ratcheting must be reversible (or predictive) otherwise we cannot mitigate false/fabricated messages.`
+> FIXME consider that i, j, k control the ratchet, and also we rely on i, k for determining the authenticator. We need to be aware that the authenticator can be verified only after ratcheting. Therefore, ratcheting must be reversible (or predictive) otherwise we cannot mitigate false/fabricated messages.
 
-`TODO existing problem: encoding to be used within message payload is unaddressed. The result is that some chat protocols, which might support multiple formats, take an arbitrary decision. In addition, some of these protocols do support indicating the format, e.g. by MIME type, but this holds for the raw transport layer, i.e. the transport over which the OTR-encoded message travels.`
+> TODO existing problem: encoding to be used within message payload is unaddressed. The result is that some chat protocols, which might support multiple formats, take an arbitrary decision. In addition, some of these protocols do support indicating the format, e.g. by MIME type, but this holds for the raw transport layer, i.e. the transport over which the OTR-encoded message travels.
 
-`TODO Phi+ does not describe how the Phi value should be extended with transport protocol specific values to be verified.`
+> REMARK Phi+ does not describe how the Phi value should be extended with transport protocol specific values to be verified.
 
 This document describes version 4 of the Off-the-Record Messaging protocol.
 OTR version 4 (OTRv4) provides better deniability properties by the use of a
@@ -1167,12 +1167,7 @@ Key variables:
     excessive recipient computation.
 ```
 
-`FIXME revealing all stored MK_MACs in the next ratchet, means that MK_MACs from
-received messages are revealed with next sender keys rotation, meaning that the
-other party may still be actively using the original ratchet for sending messages
-as long as our first sent message (that reveals the existing MACs) has not yet
-been received. (After receiving, the other party will rotate away using our
-public keys.)`
+> FIXME revealing all stored MK_MACs in the next ratchet, means that MK_MACs from received messages are revealed with next sender keys rotation, meaning that the other party may still be actively using the original ratchet for sending messages as long as our first sent message (that reveals the existing MACs) has not yet been received. (After receiving, the other party will rotate away using our public keys.)
 
 Depending on the event, the state variables are incremented and some key
 variable values are replaced:
@@ -1993,6 +1988,8 @@ To validate a Prekey Profile, you must (in this order):
 
 ## Online Conversation Initialization
 
+> TODO `max_remote_i_seen` seems no longer as useful as in early designs. Ratcheting is determined by `i`. As it alternates between sender and receiver, the `max_remote_seen_i` can be derived from the time when a new keys are rotated. This is related to last-minute changes in the handling of `i` with `i % 3 == 0` for including DH keys in brace-key generation.
+
 Online OTRv4 conversations are initialized through a [Query Message or a
 Whitespace Tag](#user-requests-to-start-an-otr-conversation). After this, the
 conversation is authenticated using the interactive DAKE.
@@ -2022,7 +2019,7 @@ denoted `Fa` for Alice's, and `Fb` for Bob's.
 
 #### Interactive DAKE Overview
 
-`FIXME descriptions will be clearer if we forego use of our_ecdh/our_dh/their_ecdh/their_dh and just speak in terms of A, B, X, Y, aliceFirstECDH, bobFirstECDH, etc. The steps of the protocol are already described in phases as executed by Alice/Bob, so the additional level of indirection (aliasing of keys) is unnecessary.`
+> FIXME descriptions will be clearer if we forego use of our_ecdh/our_dh/their_ecdh/their_dh and just speak in terms of A, B, X, Y, aliceFirstECDH, bobFirstECDH, etc. The steps of the protocol are already described in phases as executed by Alice/Bob, so the additional level of indirection (aliasing of keys) is unnecessary.`
 
 ```
 Alice                                           Bob
@@ -2063,7 +2060,7 @@ Bob will be initiating the DAKE with Alice.
 1. Sets `X` and `x` as `our_ecdh`: the ephemeral ECDH keys.
 1. Sets `A` and `a` as `our_dh`: the ephemeral 3072-bit DH keys.
 1. Calculates the Mixed shared secret (`K`) and the SSID:  
-   `FIXME item below instructs securely deleting public keys used as A and X. This is not yet possible, because we still need to verify the ring signature, which requires B, Y, A and X to be present.`
+   > FIXME item below instructs securely deleting public keys used as A and X. This is not yet possible, because we still need to verify the ring signature, which requires B, Y, A and X to be present.
     * Calculates ECDH shared secret
       `K_ecdh = ECDH(our_ecdh.secret, their_ecdh)`. Securely deletes
       `our_ecdh.secret`, `our_ecdh.public` and `their_ecdh`. Replaces them with:
@@ -3530,6 +3527,8 @@ After each `extra_sym_key_n` is used to derived the next one, it should be
 safely deleted. If it is not used to derive any subsequent keys, then
 it should be deleted after an appropriate interval.
 
+> REMARK there is currently no agreement on any values to use as `context` value.
+
 ### Revealing MAC Keys
 
 Old MAC keys are keys from already received messages, that will no longer be
@@ -4028,9 +4027,7 @@ If the state is `WAITING_AUTH_I`:
     the 'Receiver's instance tag'. Validate that that value is equal to your
     'Sender's instance tag'. Ignore the message if any of the validations fails.
   * If validation succeeds:
-    * Forget the old `our_ecdh`, `our_dh`, `our_ecdh_first.public` and
-      `our_dh_first.public` values that you generated earlier, as we previously
-      cleared the key material.
+    * > FIXME Forget the old `our_ecdh`, `our_dh`, `our_ecdh_first.public` and `our_dh_first.public` values that you generated earlier, as we previously cleared the key material.
     * Forget the old `their_ecdh`, `their_dh`, `their_ecdh_first`,
       `their_dh_first` and Client Profile from the previously received Identity
       message.
@@ -4242,7 +4239,7 @@ If the version is 3:
         keys for this correspondent, and transition msgstate to
         `MSGSTATE_FINISHED`.
 
-`FIXME note that this does not explain what to do with remaining MK_MAC keys to be revealed. The sender of the TLV Type 1 disconnect message has the opportunity to reveal. The receiver does not. It is possible -- within the protocol as it is described -- to send the remaining MACs in a message that has the IGNORE_UNREADABLE flag set. That way all MK_MAC keys are revealed. Especially given that the person issuing the 'disconnect' is the one affected by the fact that receiver's MK_MACs aren't revealed.`
+> FIXME note that this does not explain what to do with remaining MK_MAC keys to be revealed. The sender of the TLV Type 1 disconnect message has the opportunity to reveal. The receiver does not. It is possible -- within the protocol as it is described -- to send the remaining MACs in a message that has the IGNORE_UNREADABLE flag set. That way all MK_MAC keys are revealed. Especially given that the person issuing the 'disconnect' is the one affected by the fact that receiver's MK_MACs aren't revealed.
 
 *
   *
