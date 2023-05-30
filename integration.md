@@ -13,15 +13,16 @@ When integration OTRv4 support in any chat application, there are a few things t
     OTRv4 uses ring-signatures to verify (bi-directionally) that both clients know which other party they are interacting with. Therefore, the local and remote client's account ID is included as part of this process. If there are multiple IDs, short-hands, volatile components, et cetera available to describe a contact with, care must be taken that only a obvious (reliable) "universally unique" contact ID is used, such that for any chat protocol, any two parties will choose the same unique contact ID.  
     For example in case of IRC, a full identity string containts nick, identity, hostname. Only the `nick` is reliable for identifying a contact. Arguably, that's a very bad choice as the nick can change at any moment, and you are right. However, here we are limited to design of the protocol. Presumably, regulars will have registered and protected their nick, so that they're guaranteed to have the nick whenever they connect.
 
-1.  `FIXME OTRv4 includes public keys, making messages quite a bit larger. This is noticable on IRC in that fragmentation must be used to make it work.`
+1.  __OTRv4 protocol supports receiving messages out of order, making the payload a bit bigger.__  
+    OTRv4 can cope with receiving messages, and message fragments, out of order. Chat transports that do not or cannot guarantee in-order delivery, can still be used without risk of failure or unreadable messages. However, to enable this, each message carries additional information, making individual messages a bit bigger than in previous versions of the protocol. This mainly impacts network that limit the size of payloads, such as IRC, and OTR handles this by sending messages in multiple parts (fragments) if necessary. Still, the additional information makes this more relevant than previous versions.
 
-1.  `FIXME limitations due to chosen goal: embedding, independent of protocol`
+1.  `FIXME limitations due to chosen goal: embedding, independent of protocol, e.g. mime-types, message-format expectations, expected/supported character-sets, XMPP message carbons, retrieving history, etc.`
 
 ## Drawbacks of OTR version 2, 3
 
 - `FIXME extra symmetric key not further defined, so not useful`
 - `FIXME different protocols, different mime-types, different assumptions`
-- `OTR version 3 tackled situation where multiple clients are active on one account`
+- `FIXME OTR version 3 tackled situation where multiple clients are active on one account`
 - 
 
 ## Known problems
@@ -31,7 +32,7 @@ There are known problems with earlier versions of Off-the-Record (OTR). Most of 
 ```FIXME
 - "compatibility issues"
 - "embedded HTML parser / stripping HTML tags"
-- encoding of the content
+- encoding of the content (OTR spec says "optionally with HTML markup" which makes behavior/expecations ambiguous)
 - aligning use of _extra symmetric key_
 - "unreliable" (incorrectly displaying current state, such as "showing as insecure while secure")
 ```
@@ -41,7 +42,7 @@ There are known problems with earlier versions of Off-the-Record (OTR). Most of 
 ```FIXME
 - Capability Negotiation (CAPNEG)
   - supporting clients can negotiate/align handling resources
-    - mime-type for content payload
+    - mime-type for content payload (e.g. assume plaintext until mime-type negotiated)
 ```
 
 ## TODO OTRv4 drawbacks

@@ -3153,6 +3153,8 @@ This message is used to transmit a private message to the correspondent. It is
 also used to [Reveal Old MAC Keys](#revealing-mac-keys). This data message is
 encoded as defined in the [Encoded Messages](#encoded-messages) section.
 
+> FIXME note the mention "optionally with HTML markup" which makes it possible for clients to deviate in behavior and expectations.
+
 The plaintext message (either before encryption or after decryption) consists of
 a human-readable message (encoded in UTF-8, optionally with HTML markup),
 optionally followed by:
