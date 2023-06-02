@@ -1533,7 +1533,7 @@ Client Profile (CLIENT-PROF):
   Client Profile Signature (CLIENT-EDDSA-SIG)
 ```
 
-`TODO check what to do if DSA public key present without transitional signature. (Prefer, reject as illegal, be strict)`
+> TODO check what to do if DSA public key present without transitional signature. (Prefer, reject as illegal, be strict)
 
 The supported fields should not be duplicated. They are:
 
