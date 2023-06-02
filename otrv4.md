@@ -10,6 +10,14 @@ This protocol specification is a draft. It's currently under constant revision.
 
 > TODO existing problem: encoding to be used within message payload is unaddressed. The result is that some chat protocols, which might support multiple formats, take an arbitrary decision. In addition, some of these protocols do support indicating the format, e.g. by MIME type, but this holds for the raw transport layer, i.e. the transport over which the OTR-encoded message travels.
 
+> TODO check if behavior is described: given encrypted session, how to respond if Query-message is received.
+
+> TODO check behavior of/handling of OTR Error messages. Must not be an unauthenticated message that can end an encrypted session.
+
+> TODO should we automatically extend trust to the OTRv4 identity if we receive a client profile with transitional (legacy, DSA) signature of trusted OTRv3 public key?
+
+> REMARK review what it states about (resistance against) active attacks
+
 > REMARK Phi+ does not describe how the Phi value should be extended with transport protocol specific values to be verified.
 
 This document describes version 4 of the Off-the-Record Messaging protocol.
@@ -1525,6 +1533,8 @@ Client Profile (CLIENT-PROF):
   Client Profile Signature (CLIENT-EDDSA-SIG)
 ```
 
+`TODO check what to do if DSA public key present without transitional signature. (Prefer, reject as illegal, be strict)`
+
 The supported fields should not be duplicated. They are:
 
 ```
@@ -2003,6 +2013,8 @@ version 3, this response is ignored.
 
 ### Interactive Deniable Authenticated Key Exchange (DAKE)
 
+> FIXME make changes to DAKE as described in review item "1. DAKE confusion".
+
 This section outlines the flow of the interactive DAKE. This is a way to
 mutually agree upon shared keys for the two parties and authenticate one another
 while providing participation deniability.
@@ -2029,6 +2041,10 @@ Alice                                           Bob
        Auth-R --------------------------------->
        <--------------------------------- Auth-I
 ```
+
+> TODO all this "set as their_ecdh" makes things unnecessarily complicated. Simplify, as you don't have to describe variable assignments in the spec.
+
+> TODO what if DH-Commit message (or Identity message?) is received as response to other client's query tag? (E.g. check for existing session, and its status?)
 
 Bob will be initiating the DAKE with Alice.
 
@@ -3356,6 +3372,8 @@ The decryption mechanism works as:
     * If `message_id` < `k`:
       * This is a duplicated message. Discard the message.
 
+> FIXME below instructions explain to ratchet, but this must be done in a way that can be rolled back. If the message turns out illegal/corrupted/malicious, then the ratchet was not justified.
+
 * Given a new ratchet (the 'Public ECDH Key' is different from `their_ecdh` and
   the 'Public DH Key' is different from `their_dh`):
 
@@ -3392,6 +3410,8 @@ The decryption mechanism works as:
   * Securely delete the previous root key (`prev_root_key`) and `K`.
   * Derive the next receiving chain key, `MKenc` and `MKmac`, and decrypt the
     message as described below.
+
+> FIXME below instructions explain how to rotate chainkey, but this must be done in a way that can be rolled back. If the message turns out illegal/corrupted/malicious, then the chainkey rotation was not justified.
 
 * When receiving a data message in the same DH Ratchet:
   * Store any message keys from the current DH Ratchet that correspond to
@@ -4671,6 +4691,8 @@ cr (SCALAR), d7 (SCALAR)
 ```
 
 ### The SMP State Machine
+
+> TODO check if specced to have IGNORE_UNREADABLE flag set. (Mention for protocol version 3)
 
 OTRv4 does not change the state machine for SMP from OTRv3. But the following
 sections detail how values are computed differently during some states. Each
