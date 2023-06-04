@@ -3510,11 +3510,13 @@ Upon receipt of the Data Message containing the type 7 TLV, the recipient will
 compute the extra symmetric key in the same way, by using `chain_key_r`. Note
 that the value of the extra symmetric key is not contained in the TLV itself.
 
+> FIXME below "4-byte zeroes" must be 4 actual bytes in hex. (It showed 2-byte hex.)
+
 If more keys are wished to be derived from this already calculated extra
 symmetric key, this can be done by taking the index (starting from 0) from the
 TLV list received in the data message and the context received in 7 TLV itself
 (the 4-byte indication of what this symmetric key will be used for. If there is
-no context, 4-byte zeros can be used `0x0000`), and use them as inputs to the
+no context, 4-byte zeros can be used `0x00000000`), and use them as inputs to the
 KDF:
 
 ```
