@@ -3567,6 +3567,8 @@ Old MAC keys are formatted as a list of 64-byte concatenated values. The first
 data message sent every ratchet reveals them or the TLV type 1 that is used when
 the session is expired.
 
+> TODO MAC-keys are revealed after use by the receiving party. However, after receiving a message with TLV type 1 (DISCONNECT), the receiver no longer has an opportunity to reveal their collected keys, i.e. MAC-keys for messages sent by the sender of the disconnect-message. Should propose to send last message with flag IGNORE_UNREADABLE in order to expose those final MAC-keys without bothering its receiver with the inability to read.
+
 ## Fragmentation
 
 Some networks may have a _maximum message size_ that is too small to contain
