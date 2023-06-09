@@ -3512,6 +3512,8 @@ that the value of the extra symmetric key is not contained in the TLV itself.
 
 > FIXME below "4-byte zeroes" must be 4 actual bytes in hex. (It showed 2-byte hex.)
 
+> FIXME `index` does not have a data-type, but is specified as single byte value.
+
 If more keys are wished to be derived from this already calculated extra
 symmetric key, this can be done by taking the index (starting from 0) from the
 TLV list received in the data message and the context received in 7 TLV itself
