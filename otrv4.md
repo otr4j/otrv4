@@ -490,6 +490,8 @@ A point should be encoded and decoded as a `POINT` type, which is defined in the
 
 The byte representation of a value `x` is defined as `byte(x)`.
 
+> TODO for completeness, `ED448-FORGING-KEY`, `PREKEY-EDDSA-SIG` is missing.
+
 The endianness is little and big-endian. Data types that are specific to
 elliptic curve arithmetic (`POINT`, `SCALAR`, `ED448-PUBKEY`,
 `ED448-SHARED-PREKEY` and `EDDSA-SIG`) are encoded as little-endian. The rest of
@@ -819,11 +821,13 @@ Ring Signature Authentication (RING-SIG):
 OTR users have long-lived public keys that they use for authentication (but not 
 for encryption). OTRv4 introduces a new type of this long-term public key:
 
+> REMARK this seems to be correct, but is somewhat confusing. The known OTR-encoding for short-type is incorrect here, since the 'pubkey type (2-byte unsigned value)' is expected to be encoded in little-endian. This deviates from all other primitive value encodings, which are all in big-endian.
+
 ```
 OTRv4 public authentication Ed448 key (ED448-PUBKEY):
 
   Pubkey type
-    2 byte unsigned value, little-endian
+    2-byte unsigned value, little-endian
     Ed448 public keys have type 0x0010
 
   H (POINT)
@@ -839,7 +843,7 @@ serialized as follows:
 OTRv4 public Ed448 forging key (ED448-FORGING-KEY):
 
   Pubkey type
-    2 byte unsigned value, little-endian
+    2-byte unsigned value, little-endian
     Ed448 public keys have type 0x0012
 
   F (POINT)
@@ -853,7 +857,7 @@ The OTRv4 public shared prekey is defined as follows:
 OTRv4 public shared prekey (ED448-SHARED-PREKEY):
 
   Shared Prekey type
-    2 byte unsigned value, little-endian
+    2-byte unsigned value, little-endian
     Ed448 shared prekeys have type 0x0011
 
   D (POINT)

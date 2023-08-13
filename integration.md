@@ -2,6 +2,8 @@
 
 OTR is a protocol that is designed to function on top of existing infrastructure. This document describes some considerations. This is motivated in part because of criticism on earlier versions of the protocol, in the hopes of relieving some of the confusion and frustration.
 
+`TODO re-check intricacies of Phi+ value and how *obvious* is it how to add other parameters, how easily can independent implementations screw this up?`
+
 ## Integrating OTRv4
 
 When integration OTRv4 support in any chat application, there are a few things to realize.
