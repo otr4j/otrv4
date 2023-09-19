@@ -2050,9 +2050,13 @@ Alice                                           Bob
 
 > TODO what if DH-Commit message (or Identity message?) is received as response to other client's query tag? (E.g. check for existing session, and its status?)
 
+> TODO same algorithm for generating k (used for ssid + previous root key) and later the key material for initializing the Double Ratchet algorithm. Should be extracted as separate item and referenced to avoid confusion and unnecessary double-checking of same text.
+
 Bob will be initiating the DAKE with Alice.
 
 **Bob:**
+
+> TODO instead of `their_ecdh` and `their_dh` make it explicit and refer to `Y`, `B`, etc.
 
 1. Generates an Identity message, as defined in
    [Identity Message](#identity-message) section.
@@ -2062,6 +2066,8 @@ Bob will be initiating the DAKE with Alice.
    and `our_dh_first.public` attached.
 
 **Alice:**
+
+> TODO instead of `their_ecdh` and `their_dh` make it explicit and refer to `Y`, `B`, etc.
 
 1. Receives an Identity message from Bob:
     * Verifies the Identity message as defined in the
@@ -2101,7 +2107,7 @@ Bob will be initiating the DAKE with Alice.
       `brace_key = KDF(usage_third_brace_key || k_dh, 32)`. Securely deletes
       `k_dh`.
     * Calculates the Mixed shared secret
-      `K = KDF(usage_shared_secret ||K_ecdh || brace_key, 64)`.
+      `K = KDF(usage_shared_secret || K_ecdh || brace_key, 64)`.
       Securely deletes `K_ecdh` and `brace_key`.
     * Calculates the SSID from shared secret: `HWC(usage_SSID || K, 8)`.
 1. Sends Bob the Auth-R message (see [Auth-R Message](#auth-r-message) section),
@@ -2109,7 +2115,11 @@ Bob will be initiating the DAKE with Alice.
    must not send data messages at this point, as she still needs to receive
    the 'Auth-I' message from Bob.
 
+> REMARK SSID is only needed later, generation could be delayed until handling Auth-I message.
+
 **Bob:**
+
+> TODO instead of `their_ecdh` and `their_dh` make it explicit and refer to `Y`, `B`, etc.
 
 1. Receives the Auth-R message from Alice:
    * Picks a compatible version of OTR listed on Alice's profile, and follows
@@ -2152,7 +2162,7 @@ Bob will be initiating the DAKE with Alice.
 1. Initializes the double-ratchet algorithm:
     * Sets `i`, `j`, `k` `pn` as 0.
     * Sets `max_remote_i_seen` as -1.
-    * Interprets `K` as the first root key (`prev_root_key`) by:
+    * `FIXME bad wording, K is used in calculation, not used directly` Interprets `K` as the first root key (`prev_root_key`) by:
       `prev_root_key = KDF(usage_first_root_key || K, 64)`.
     * Calculates the receiving keys:
       * Calculates `K_ecdh = ECDH(our_ecdh.secret, their_ecdh)`.
@@ -2201,6 +2211,8 @@ Bob will be initiating the DAKE with Alice.
        subsections.
 
 **Alice:**
+
+> TODO instead of `their_ecdh` and `their_dh` make it explicit and refer to `Y`, `B`, etc.
 
 1. Receives the Auth-I message from Bob:
    * Verifies the Auth-I message as defined in the
@@ -5016,6 +5028,8 @@ This function can be generalized so it is not possible to determine which secret
 key was used to produce this ring signature, even if all secret keys are
 revealed. For this, constant-time conditional operations should be used.
 
+> TODO I don't think there is a point in distinguishing values `t1`, `t2`, `t3`. Only one gets used at any one time, so just use `t` for whichever `i` in `{1,2,3}`. (Requires ensuring exactly 1 selected, which is already in the spec.)
+
 The prover knows a secret `ai` and, therefore:
 
 1. Pick random values `t1, t2, t3, c1, c2, c3, r1, r2, r3` in `Z_q`.
@@ -5033,6 +5047,8 @@ The prover knows a secret `ai` and, therefore:
 
 1. Depending of the result of the above operations, compute:
 
+> TODO see comment above, below can all use `t`, unless very big issue with `t` reused in intermediate calculation. (Only one will remain with influence of `t`)
+
 ```
   T1 = constant_time_select(eq1, encode(G * t1), encode(G * r1 + A1 * c1))
   T2 = constant_time_select(eq2, encode(G * t2), encode(G * r2 + A2 * c2))
@@ -5045,6 +5061,7 @@ The prover knows a secret `ai` and, therefore:
    `eqk == 0`, for `i != j != k`): `ci = c - cj - ck (mod q)`.
 1. For whichever equally returns true (for example, if `eqi == 1`):
    `ri = ti - ci * ai (mod q)`. Securely delete `ti`.
+> FIXME below scalars `ci`, `ri`, etc. should be `c1`, `r1`, etc., i.e. explicit scalars, such that they do not swap position if `i` == `{1, 2, 3}`.
 1. Compute `sigma = (ci, ri, cj, rj, ck, rk)`.
 
 If the prover knows `a2`, for example, the `RSig` function looks like this:
@@ -5073,6 +5090,8 @@ can be inferred in practice).
 `RVrf` is the verification function for the SoK `sigma`, created by `RSig`.
 
 `A1`, `A2`, and `A3` should be checked to verify that they are on curve Ed448.
+
+> TODO below uses `HWC` while signing uses `HashToScalar`, should probably be the same method to arrive at the same goal.
 
 1. Parse `sigma` to retrieve components `(c1, r1, c2, r2, c3, r3)`.
 1. Compute `T1 = G * r1 + A1 * c1`
