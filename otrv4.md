@@ -3756,6 +3756,8 @@ required and if it will advertise OTR support.
 
 ### Protocol States
 
+> FIXME can Identity-messages be replayed to perform a Denial-of-Service attack on existing (in-progress) encrypted sessions, i.e. sessions that are currently in ENCRYPTED_MESSAGES state? (the state machine currently specifies to reply with AUTH-R and also immediately transition to AWAITING_AUTH_I.) Given that we do not fully complete the DAKE, we allow cancelling an existing session for a message that supposedly initiates a DAKE but may never complete. If we separate the DAKE state machine and only transition after the DAKE is fully completed, then it wouldn't be possible to complete the DAKE without having proved access to the secret key material. (Therefore, just replaying messages is not enough.)
+
 ```
 START
 
@@ -4046,6 +4048,7 @@ If the state is `WAITING_AUTH_R`:
 
   * Validate the Identity message. Ignore the message if validation fails.
   * If validation succeeds:
+    * > FIXME the procedure to compare hashes needs more details: supposedly plain hash (without context) still we need to know whether to adopt minimum-length unsigned representation or fixed-size encoding, then how many bytes to take from SHAKE-256. (OTR3 just compares BigUints IIRC, why not simply compare the unsigned integers? issues with constant-time?)
     * Compare the hashed `B` you sent in your Identity message with the DH value
       from the message you received, considered as 32-byte unsigned big-endian
       values.
@@ -4079,6 +4082,8 @@ If the state is `WAITING_AUTH_I`:
       message.
 
 If the state is `ENCRYPTED_MESSAGES` or `FINISHED`:
+
+> FIXME concern w.r.t. DoS by replaying Identity-messages, mentioned in feedback for Protocol State Machine.
 
   * Validate the new Identity message. Ignore the message if validation fails.
   * If validation succeeds:
