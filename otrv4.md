@@ -2162,8 +2162,8 @@ Bob will be initiating the DAKE with Alice.
 1. Initializes the double-ratchet algorithm:
     * Sets `i`, `j`, `k` `pn` as 0.
     * Sets `max_remote_i_seen` as -1.
-    * `FIXME bad wording, K is used in calculation, not used directly` Interprets `K` as the first root key (`prev_root_key`) by:
-      `prev_root_key = KDF(usage_first_root_key || K, 64)`.
+    * > FIXME bad wording, K is used in calculation, not used directly: "Interprets `K` as the first root key (`prev_root_key`) by:
+      `prev_root_key = KDF(usage_first_root_key || K, 64)`."
     * Calculates the receiving keys:
       * Calculates `K_ecdh = ECDH(our_ecdh.secret, their_ecdh)`.
       * Calculates `k_dh = DH(our_dh.secret, their_dh)`.
