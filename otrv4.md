@@ -1433,6 +1433,8 @@ timer as they send the first data message or as they attach an encrypted
 message to the Non-Interactive-Auth message. The receiver begins their timer
 when they receive this first data message.
 
+> TODO below comment on reliable clocks: this is not necessarily the case. What's necessary is _monotonic time_ to be able to determine how much time has passed. Monotonic time is oblivious to clock time, changes/corrections, such as time-zone changes, ntp clock synchronization, etc. (This does not hold for expiration time of the client profile. So we do need a reliable coarse indication of date/time.)
+
 Since the session expiration uses a timer, it can be compromised by clock
 errors. Some errors may cause the session to be deleted too early and result in
 undecryptable messages being received. Other errors may result in the clock not
@@ -3757,6 +3759,7 @@ required and if it will advertise OTR support.
 ### Protocol States
 
 > FIXME can Identity-messages be replayed to perform a Denial-of-Service attack on existing (in-progress) encrypted sessions, i.e. sessions that are currently in ENCRYPTED_MESSAGES state? (the state machine currently specifies to reply with AUTH-R and also immediately transition to AWAITING_AUTH_I.) Given that we do not fully complete the DAKE, we allow cancelling an existing session for a message that supposedly initiates a DAKE but may never complete. If we separate the DAKE state machine and only transition after the DAKE is fully completed, then it wouldn't be possible to complete the DAKE without having proved access to the secret key material. (Therefore, just replaying messages is not enough.)
+> FIXME NOTE: comment on DoS above is slightly misleading, as the spec states it does not protect against an 'active attacker performing DoS'. However, there is also the replay/repeat of messages by anomalies in the network (delays/drops/etc.), which is not rooted in this specific kind of hostile intention, which also interfere. The suggested improvement would be generally better both in design, and sound advice of acting on trusted information. If, like with OTRv3, we process the DAKE in a separate state-machine, we allow the later process to verify the earlier message therefore detecting illegal claims and/or lack of follow-up messages.
 
 ```
 START
