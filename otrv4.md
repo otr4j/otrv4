@@ -1336,6 +1336,8 @@ To rotate the brace key:
       `brace_key = KDF(usage_brace_key || brace_key, 32)`.
     * Set `i = i + 1`.
 
+> TODO note again, this process resets `i`, which does not seem to be necessary from the perspective of functionality. It does result in more confusion, given that few `i` values keep repeating and we need the ECDH public key as additional identifier to identify a specific ratchet. (See elaboration in `review.md`.)
+
 ### Deriving Double Ratchet Keys
 
 To derive the next root key and the current chain key:
