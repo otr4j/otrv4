@@ -1545,6 +1545,8 @@ Client Profile (CLIENT-PROF):
 
 The supported fields should not be duplicated. They are:
 
+> TODO Public Key and Forging Key both have pubkey-type identifiers (0x0010 and 0x0012 respectively) this seems redundant given unique identifiers in Client-Profile data-type.
+
 ```
 Client Profile owner instance tag (INT)
   Type = 0x0001
@@ -1700,6 +1702,8 @@ recommended value is one week.
 
 If version 3 and 4 are supported and the user has a pre-existing OTRv3
 long-term keypair:
+
+> FIXME OTRv3 spec manually constructs 20-byte prehash for signing. The spec below does not make explicit to generate a prehash; assuming `m` is encoded-but-not-hashed. (Which does deviate from OTRv3 practice which hashes.)
 
    * Concatenate `Client Profile owner instance tag || Ed448 public key || Ed448
      public forging key || Versions || Client Profile Expiration || OTRv3 public
