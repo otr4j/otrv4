@@ -4207,6 +4207,8 @@ to send encrypted messages:
   * Inform the user that the message cannot be sent at this time.
   * Store the plaintext message for possible retransmission.
 
+> TODO item above, about '... storing plaintext message' until an encrypted session is established: there is a complication here, because whenever an encrypted session is established with a party that currently has multiple clients active for their account, then we would send the stored messages to the session that first establishes the encrypted OTR session. This may be a client on a computer somewhere that is not currently in use. (I'm thinking it's easier and less error prone to just drop this requirement and simply feedback the host chat client that sending failed.)
+
 If the state is `ENCRYPTED`:
 
   * Encrypt the message, and send it as a Data Message.
