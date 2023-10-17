@@ -1246,6 +1246,8 @@ K:
 
 ### Generating Shared Secrets
 
+> FIXME Be careful: the check below states `K_ecdh == 0` is error case, but this is probably `K_ecdh == 1`. The `== 0` was for Montgomery notation, however we use Edwards. It must not be equal to the _identity_. (Needs to be double-checked.)
+
 ```
 ECDH(a, B)
   K_ecdh = a * B
@@ -2450,14 +2452,16 @@ A (MPI)
 sigma (RING-SIG)
   The 'RING-SIG' proof of authentication value.
 
-our_ecdh_first.public
+our_ecdh_first.public (POINT)
   The ephemeral public ECDH key that will be used for the intialization of
   the double ratchet algorithm.
 
-our_dh_first.public
+our_dh_first.public (MPI)
   The ephemeral public DH key that will be used for the intialization of
   the double ratchet algorithm.
 ```
+
+> FIXME datatypes missing for last two fields.
 
 #### Auth-I Message
 
