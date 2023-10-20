@@ -991,6 +991,8 @@ Type 1: Disconnected
   participant should do the same. Old mac keys can be attached to this TLV when
   the session is expired. This TLV should have the 'IGNORE_UNREADABLE' flag set.
 
+> REMARK this is an unfortunate choice, because type `7` already exists. It would be easier to have 1 semantic for each type, and choose to use only type `7` because we require the semantics for a (possibly empty) question. (I understand reasons for both ways: it _is_ appealing to remove artifacts of previous versions of the protocol.)
+
 Type 2: SMP Message 1
   The value represents the initial message of the Socialist Millionaires'
   Protocol (SMP). Note that this represents TLV type 2 and 7 from OTRv3.
@@ -1016,6 +1018,8 @@ Type 6: SMP Abort Message
   associated value should be empty. If you receive a TLV of this type, you
   should change the SMP state to 'SMPSTATE_EXPECT1' (see below, in SMP section).
   This TLV should have the 'IGNORE_UNREADABLE' flag set.
+
+> REMARK this is unfortunate, because semantics now change between OTR3 and OTRv4, where extra-symmetric-key is type `8`. (I understand reasons for both ways: it _is_ appealing to remove artifacts of previous versions of the protocol.)
 
 Type 7: Extra symmetric key
   If you wish to use the extra symmetric key, compute it yourself as outlined
@@ -1052,6 +1056,8 @@ knowledge of the application network stack) should define a known shared session
 state from the higher-level protocol as `phi'`, as well as include the values
 imposed by this specification.
 
+> TODO make explicit that OTR-encoding is used in constructing `phi`. (This is now only implied through the `DATA` reference.)
+
 Note that variable length fields are encoded as DATA. If `phi'` is a string, it
 will be encoded in UTF-8.
 
@@ -1065,6 +1071,8 @@ tag by numerical order and any string passed to `phi'` lexicographically.
   phi = session identifier mandated by the OTRv4 spec || phi'
 ```
 
+> TODO IIUC, in pseudocode: `sort(sender-tag, receiver-tag) || sort(sender-first-ecdh, receiver-first-ecdh, sender-first-dh, receiver-first-dh) || phi'` (although this doesn't seem to make much sense at all. Probably better to fix the positions as we have an exact definition of the fields) (There isn't a goal to have same `phi` irrespective of who is sender / receiver? That would be a reason why sorting would make sense instead of fixed positions. However, that doesn't make sense, because the first ECDH/DH keys should be unique each session.)
+
 In XMPP, for example, `phi'` can be the node and domain parts of the sender and
 receiver's jabber identifier, e.g. `alice@jabber.net` (often referred as the
 "bare JID"). In an application that assigns some attribute to users before a
@@ -1075,6 +1083,8 @@ the expected attributes (expressed in fixed length) should be included in
 For example, a shared session state which higher-level protocol is XMPP, will
 look like:
 
+> TODO I think the example case below is unclear. First the `0x57` and `0x164` seem arbitrary values, but if so, should be different for sender and receiver. If the intention was to refer to them by length, then the `0x<length>` notation doesn't make sense, and the 164 doesn't make sense.
+
 ```
   phi = sender's instance tag || receiver's instance tag || our_ecdh_first ||
         our_dh_first || their_ecdh_first || their_dh_first ||
@@ -1082,6 +1092,8 @@ look like:
   phi = 0x00000100 || 0x00000101 || 0x57 || 0x164 || 0x57 || 0x164 ||
         DATA("alice@jabber.net") || DATA("bob@jabber.net")
 ```
+
+> TODO `phi` will be a problem because there is no standardized solution that's _obvious_ to implementers/implementations irrespective of protocol. The intentions are great, but unless we can align without chance for mistake, this will be a source of compatibility-issues. (At least the mandated set is obvious and predictable enough.) Probably requires this mentioned `implementation.md` document to specify practices. (This case is similar to the use of the "Extra Symmetric Key" issue in both OTR 3 and OTRv4.)
 
 ### Secure Session ID
 

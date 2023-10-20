@@ -22,7 +22,7 @@ When integration OTRv4 support in any chat application, there are a few things t
 
 ## Drawbacks of OTR version 2, 3
 
-- `FIXME extra symmetric key not further defined, so not useful`
+- `FIXME extra symmetric key not further defined, so not useful. (That is, the general idea is clear, the foundation is laid out. However, the lack of standardization and aligned approach meant that there wasn't a good vantage point from which to start with actual using the ESKs.)`
 - `FIXME different protocols, different mime-types, different assumptions`
 - `FIXME OTR version 3 tackled situation where multiple clients are active on one account`
 - 
