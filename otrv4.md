@@ -1598,6 +1598,8 @@ Client Profile Expiration (CLIENT-PROF-EXP):
 
 `CLIENT-EDDSA-SIG` refers to the OTRv4 EDDSA signature:
 
+> TODO below shorten to 1 line '114-byte unsigned value, little endian
+
 ```
 EDDSA signature (CLIENT-EDDSA-SIG):
   (len is the expected length of the signature, which is 114 bytes)
