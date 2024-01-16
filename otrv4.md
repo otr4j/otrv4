@@ -1236,6 +1236,8 @@ generateDH()
 
 ### Shared Secrets
 
+// TODO `k_dh` is not specified as having either minimum-length or fixed-length encoding. for K_ecdh this is obvious because of how `POINT` is defined. In case of `k_dh`, it is encoded as big-endian unsigned integer, without making this explicit. OTRv4 and OTR3 both specify how OTR-encoded MPIs are minimum-length, but `k_dh` is not an OTR-encoded MPI. For otr4j/otrr assumed _minimum-length_.
+
 ```
 k_dh:
   The 3072-bit DH shared secret computed from a DH exchange, serialized as a
