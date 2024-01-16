@@ -3295,6 +3295,9 @@ parameter should be set to 0. This latter process is called a DH Ratchet.
 
 Given a new DH Ratchet:
 
+// REMARK first bullet below hints at `public DH key` being empty if not a DH-ratchet (i.e. third-brace-key ratchet) maybe could be emphasized more? (space-effiency, encoding)
+
+
   * Rotate the ECDH keys and brace key, see
     [Rotating ECDH Keys and Brace Key as sender](#rotating-ecdh-keys-and-brace-key-as-sender)
     section.
