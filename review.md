@@ -40,6 +40,7 @@ Proposal 1: embrace (monotonically increasing) `i` as identifier
 1.  No longer use _ECDH public key_ as identifier for ratchet. (Only as public key.)
 1.  Cannot conclude duplicate messages: for any duplicate message, the Message Keys (if even previously stored) would now be gone. Without ability to authenticate, message could be: duplicate, corrupted or malicious.
 1.  Would only need to track past _public keys_ to detect reuse.
+1.  Relying on `i` makes logic more complicated due to need to take into account `i-1` if sender next for rotation or `i-2` if receiver next for rotation but message is from earlier ratchet therefore rotation is not yet required.
 
 Proposal 2: embrace _ECDH public key_ as (arbitrary) identifier
 

@@ -5149,6 +5149,8 @@ can be inferred in practice).
 
 ### HashToScalar
 
+> REMARK given 57 bytes of arbitrary data, scalar can be out of range. Needs explicit mention of `mod q`? Leaving it out was probably intentional (because in one use afterwards a `mod q` is performed as sole action), but does mean that `h` is larger than necessary as it will subsequently be plugged into `mod q` equations anyways.
+
 This function is `HashToScalar(usageID || d, 57)`, where d is an array of
 bytes.
 
