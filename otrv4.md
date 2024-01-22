@@ -1668,7 +1668,9 @@ Then, assemble:
    Transitional signature without publish the OTRv3 public authentication DSA
    key on the Client Profile.
 
-> TODO above spec allows transitional signature to be present and validatable even if DSA public key is absent. However, users per OTR3-spec do not store DSA public keys but only fingerprints. Therefore, if a transitional signature is present, the only option is delayed validation once an OTR3 session is established and DSA public key is received. This seems strange because it means we're in a situation where both parties understand Client-Profile's therefore both parties understand OTRv4. The only benefit is to relate an OTRv4 profile to a previously verified+trusted OTR3 identity, i.e. using the remembered public key fingerprint. (Maybe a use-case to simply avoid.)
+> TODO above spec allows transitional signature to be present and validatable even if DSA public key is absent. However, users per OTR3-spec do not store DSA public keys but only fingerprints. Therefore, if a transitional signature is present, the only option is delayed validation until first OTR3 session is established and DSA public key is received. This seems strange because it means we're in a situation where both parties understand Client-Profile's therefore both parties understand OTRv4. The only benefit is to relate an OTRv4 profile to a previously verified+trusted OTR3 identity, i.e. using the remembered public key fingerprint. (Maybe a use-case to simply avoid.)
+
+> REMARK also, the missing DSA public key would be the cause for the client-profile to not be self-contained.
 
 > TODO above also means that we need to keep bytes of client-profile for delayed transitional signature validation once next OTR3 session is established. This delay means that we cannot simply extract relevant data and store within a contact-store. Transitional signature without DSA public key is very annoying.
 
