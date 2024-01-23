@@ -3563,8 +3563,6 @@ Upon receipt of the Data Message containing the type 7 TLV, the recipient will
 compute the extra symmetric key in the same way, by using `chain_key_r`. Note
 that the value of the extra symmetric key is not contained in the TLV itself.
 
-> FIXME below "4-byte zeroes" must be 4 actual bytes in hex. (It showed 2-byte hex.)
-
 > FIXME `index` does not have a data-type, but is specified as single byte value.
 
 If more keys are wished to be derived from this already calculated extra
@@ -3578,6 +3576,8 @@ KDF:
   symkey1 = KDF(index || context || extra_sym_key, 64)
 ```
 
+> FIXME below "4-byte zeroes" must be 4 actual bytes in hex. (It showed 2-byte hex.) By convention, we should _always_ use 4 bytes. So add 2 zero-bytes if a context provides only 2 bytes of data. This corresponds with assuming 4 zero-bytes if no context-bytes are provided at all.
+
 So, if, for example, these TLVs arrive with the data message:
 
 ```
@@ -3588,6 +3588,10 @@ So, if, for example, these TLVs arrive with the data message:
   TLV 3
   TLV 7   context: 0x0001
 ```
+
+> REMARK the example suggests 4 keys, but the text suggests only the keys derived from the base key are relevant. The example is somewhat misleading.
+
+> FIXME update example to show `0x00420000` to emphasize use of 4-byte context even if only 2 bytes of data are provided.
 
 Three keys can, therefore, be calculated from the already derived extra
 symmetric key:
