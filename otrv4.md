@@ -3563,7 +3563,7 @@ Upon receipt of the Data Message containing the type 7 TLV, the recipient will
 compute the extra symmetric key in the same way, by using `chain_key_r`. Note
 that the value of the extra symmetric key is not contained in the TLV itself.
 
-> FIXME `index` does not have a data-type, but is specified as single byte value.
+> TODO `index` does not have a data-type, but examples suggest a single-byte value.
 
 If more keys are wished to be derived from this already calculated extra
 symmetric key, this can be done by taking the index (starting from 0) from the
@@ -3576,7 +3576,7 @@ KDF:
   symkey1 = KDF(index || context || extra_sym_key, 64)
 ```
 
-> FIXME below "4-byte zeroes" must be 4 actual bytes in hex. (It showed 2-byte hex.) By convention, we should _always_ use 4 bytes. So add 2 zero-bytes if a context provides only 2 bytes of data. This corresponds with assuming 4 zero-bytes if no context-bytes are provided at all.
+> TODO below "4-byte zeroes" must be 4 actual bytes in hex. (It showed 2-byte hex.) By convention, _always_ use 4 bytes. So add 2 zero-bytes if a context provides only 2 bytes of data. This corresponds with assuming 4 zero-bytes if no context-bytes are provided at all.
 
 So, if, for example, these TLVs arrive with the data message:
 
@@ -3589,9 +3589,9 @@ So, if, for example, these TLVs arrive with the data message:
   TLV 7   context: 0x0001
 ```
 
-> REMARK the example suggests 4 keys, but the text suggests only the keys derived from the base key are relevant. The example is somewhat misleading.
+> REMARK the example suggests 4 keys, but the text suggests only the keys derived from the base key are relevant. The example is somewhat misleading. Best to work with derived keys only, such that each (derived) key corresponds to a TLV.
 
-> FIXME update example to show `0x00420000` to emphasize use of 4-byte context even if only 2 bytes of data are provided.
+> TODO update example to show `0x00420000` to emphasize use of 4-byte context even if only 2 bytes of data are provided.
 
 Three keys can, therefore, be calculated from the already derived extra
 symmetric key:
@@ -3610,7 +3610,7 @@ After each `extra_sym_key_n` is used to derived the next one, it should be
 safely deleted. If it is not used to derive any subsequent keys, then
 it should be deleted after an appropriate interval.
 
-> REMARK there is currently no agreement on any values to use as `context` value.
+> REMARK there is currently no agreement on any values to use as `context` value. OTR3 described the use of the "context" value as an indicator for its purpose. For example, a value could indicate an out-of-bounds encrypted video-call where the _extra symmetric key_ is used as the encryption/decryption key. Similarly, any bytes after the first 4 would be free-form, therefore could contain any connection address or identity used to establish said video-call.
 
 ### Revealing MAC Keys
 
@@ -3655,6 +3655,8 @@ fragmentation on outgoing messages is optional.
 
 For fragmentation in OTRv3, refer to the "Fragmentation" section on OTRv3
 specification.
+
+> FIXME need to reread section of Fragmentation. (This leans in part on scheduled clean-up and should already be present in specification.) Possible to abuse fragments for denial-of-service attacks: (1) introduce many different fragment-IDs all to remain incomplete, therefore remain in memory; or (2) introduce single fragment-ID with many, many fragments. Both can be used to fill up memory.
 
 ### Transmitting Fragments
 
@@ -4088,9 +4090,12 @@ If the state is `WAITING_AUTH_R`:
     yours. Only one Identity message must be chosen for use.
   ```
 
+> FIXME the procedure to compare hashes needs more details: supposedly plain hash (without context) still we need to know whether to adopt minimum-length unsigned representation or fixed-size encoding. Other statements referring to "hashed" take a plain `SHAKE256(m, 57)` i.e. 57-byte result. In alignment with other practices, we should take 32-byte hash of the OTR-encoded MPI value, such that we are ensured of exact representation, as is regular practice in OTR3 and OTRv4. (Also, I'm working with the assumption hashing the MPI prevents carefully selected MPIs from being used to control the state machine during DAKE.)
+
+> FIXME reason for taking hash could be checked, documented in Arch appendices?
+
   * Validate the Identity message. Ignore the message if validation fails.
   * If validation succeeds:
-    * > FIXME the procedure to compare hashes needs more details: supposedly plain hash (without context) still we need to know whether to adopt minimum-length unsigned representation or fixed-size encoding, then how many bytes to take from SHAKE-256. (OTR3 just compares BigUints IIRC, why not simply compare the unsigned integers? issues with constant-time?)
     * Compare the hashed `B` you sent in your Identity message with the DH value
       from the message you received, considered as 32-byte unsigned big-endian
       values.
@@ -4240,7 +4245,7 @@ to send encrypted messages:
   * Inform the user that the message cannot be sent at this time.
   * Store the plaintext message for possible retransmission.
 
-> TODO item above, about '... storing plaintext message' until an encrypted session is established: there is a complication here, because whenever an encrypted session is established with a party that currently has multiple clients active for their account, then we would send the stored messages to the session that first establishes the encrypted OTR session. This may be a client on a computer somewhere that is not currently in use. (I'm thinking it's easier and less error prone to just drop this requirement and simply feedback the host chat client that sending failed.)
+> TODO item above, about '... storing plaintext message' until an encrypted session is established: there is a complication here: whenever an encrypted session is established with a party that currently has multiple clients active for their account, then we would send the stored messages to the session that first establishes the encrypted OTR session. This may be a client on a computer somewhere that is not currently in use. (I'm thinking it's easier and less prone to errors to just drop this requirement and simply feedback the host chat client that sending failed/was blocked.)
 
 If the state is `ENCRYPTED`:
 
