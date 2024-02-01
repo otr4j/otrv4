@@ -3630,6 +3630,8 @@ the session is expired.
 
 > TODO MAC-keys are revealed after use by the receiving party. However, after receiving a message with TLV type 1 (DISCONNECT), the receiver no longer has an opportunity to reveal their collected keys, i.e. MAC-keys for messages sent by the sender of the disconnect-message. Should propose to send last message with flag IGNORE_UNREADABLE in order to expose those final MAC-keys without bothering its receiver with the inability to read.
 
+> REMARK if we reveal (used) MAC-keys on every first message of a ratchet, a long-running ratchet will eventually produce a significant number of keys to reveal once ratcheting forward. (e.g. 40 messages results in `40*64 = 2560 bytes`) This is particularly relevant for constraint communication channels, such that fragmentation becomes relevant. For example, a channel with limit of 180 bytes (after overhead subtracted) requires 15 messages just to expose the revealed keys.
+
 ## Fragmentation
 
 Some networks may have a _maximum message size_ that is too small to contain
