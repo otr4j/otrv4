@@ -6,6 +6,8 @@ Disclaimer
 This protocol specification is a draft. It's currently under constant revision.
 ```
 
+> FIXME need to check how they explain that versions in client-profile are determined. This cannot be determined from policy as policy may change. Best decide based on presence of (legacy) DSA keypair. (May already be properly described, but needs checking.)
+
 > FIXME consider that i, j, k control the ratchet, and also we rely on i, k for determining the authenticator. We need to be aware that the authenticator can be verified only after ratcheting. Therefore, ratcheting must be reversible (or predictive) otherwise we cannot mitigate false/fabricated messages.
 
 > TODO existing problem: encoding to be used within message payload is unaddressed. The result is that some chat protocols, which might support multiple formats, take an arbitrary decision. In addition, some of these protocols do support indicating the format, e.g. by MIME type, but this holds for the raw transport layer, i.e. the transport over which the OTR-encoded message travels.
