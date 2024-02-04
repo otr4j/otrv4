@@ -1563,7 +1563,9 @@ Client Profile (CLIENT-PROF):
 
 The supported fields should not be duplicated. They are:
 
-> TODO Public Key and Forging Key both have pubkey-type identifiers (0x0010 and 0x0012 respectively) this seems redundant given unique identifiers in Client-Profile data-type.
+> TODO Public Key and Forging Key both have pubkey-type identifiers (0x0010 and 0x0012 respectively) this seems redundant given unique identifiers in Client-Profile field-types.
+
+> REMARK "owner" in owner instance tag is a bit misleading. (This is probably a remnant of what was previously called user-profile(?).) The client-profile is on per-client basis. It might be worth mentioning randomizing tag for each newly generated profile. (Not discussed, IIRC) There is risk when a client leaves unexpectedly then returns, because it uses the exact same instance-tags meaning that any residual sessions will be confused in thinking that a session is on-going with the (returned) client, i.e. reduced effectiveness for instance-tag as distinguisher.
 
 ```
 Client Profile owner instance tag (INT)
