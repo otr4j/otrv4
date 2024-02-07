@@ -1397,6 +1397,8 @@ message keys should be deleted regularly. OTRv4 implements this by detecting
 whether a new ECDH key has been generated within a certain amount of time. If it
 hasn't, the session is expired.
 
+> FIXME this seems to suggest either receiving a message or sending a message, as both activities contribute to a new ECDH shared secret. (Alternatively, they intend to say ECDH keypair, which means every sender rotation. The difference is minor, because rotations alternate between participants. Most importantly, both clients need to be active (send messages) in order to keep the ratchet(s) going.)
+
 To expire a session:
 
 1. Calculate the MAC keys corresponding to the stored message keys in the
