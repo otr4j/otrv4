@@ -4244,6 +4244,8 @@ to send encrypted data messages.
 
 If the state is `START`, `WAITING_AUTH_R`, `WAITING_AUTH_I`:
 
+> REMARK this is a mistake: for any one participant that establishes a secure connection, any number of clients can establish secure sessions at any time. Whenever and wherever a OTR-capable client is on-line, it may respond to session initiation. It is not guaranteed that exactly 1 client establishes a session, hence Instance Tags. Furthermore, OTR 3 sessions are faster to establish due to weaker cryptography and simpler protocol. Consequently, there is a significant chance that sending queued messages to the first subsequently established session, may send it to the weakest of established sessions, and furthermore to the fastest-established session not necessarily the established session. (E.g. multiple clients could receives messages, features such as XMPP's message carbon's could deliver "carbon copies" of messages to other clients "for historical record", these cannot be anticipated.) This feature would've worked perfectly if there is a guaranteed 1-vs-1 account mapping, but Instance Tags were introduced exactly because this cannot be guaranteed.
+
   * Queue the message for encrypting and sending it when the participant
     transitions to the `ENCRYPTED_MESSAGES` state.
 
@@ -4252,8 +4254,6 @@ to send encrypted messages:
 
   * Inform the user that the message cannot be sent at this time.
   * Store the plaintext message for possible retransmission.
-
-> TODO item above, about '... storing plaintext message' until an encrypted session is established: there is a complication here: whenever an encrypted session is established with a party that currently has multiple clients active for their account, then we would send the stored messages to the session that first establishes the encrypted OTR session. This may be a client on a computer somewhere that is not currently in use. (I'm thinking it's easier and less prone to errors to just drop this requirement and simply feedback the host chat client that sending failed/was blocked.)
 
 If the state is `ENCRYPTED`:
 
