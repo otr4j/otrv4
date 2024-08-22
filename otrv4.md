@@ -3664,8 +3664,6 @@ fragmentation on outgoing messages is optional.
 For fragmentation in OTRv3, refer to the "Fragmentation" section on OTRv3
 specification.
 
-> FIXME need to reread section of Fragmentation. (This leans in part on scheduled clean-up and should already be present in specification.) Possible to abuse fragments for denial-of-service attacks: (1) introduce many different fragment-IDs all to remain incomplete, therefore remain in memory; or (2) introduce single fragment-ID with many, many fragments. Both can be used to fill up memory.
-
 ### Transmitting Fragments
 
 If you have information about the _maximum message size_ you are able to send
@@ -3706,6 +3704,8 @@ Note that fragments are not messages that can be fragmented: you can't fragment
 a fragment.
 
 ### Receiving Fragments
+
+> REMARK Fragments are a possible attack vector for DoS, in part because there is no authentication of fragments. OTR3 did not have these issues, because it only accounts for 1 incomplete message in flight as the network is assumed to deliver in order. DoS options: (1) many unique message-IDs none of which are ever completed, resulting in very large data-structure and/or memory use, possibly incidentally causing collision with actual fragmented messages; (2) many fragments per message-ID, resulting in excessive memory use; (3) very large fragments, resulting in excessive memory use.
 
 A reassemble process does not to be implemented in precesely the way we are
 going to describe; but the process implemented in a library has to be able to
