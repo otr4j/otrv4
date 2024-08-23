@@ -3640,6 +3640,16 @@ the session is expired.
 
 ## Fragmentation
 
+> FIXME below limits aren't even that practical. More consideration is required in choosing values. This is a preliminary attempt at making limits visible.
+
+> TODO considering `MAX_MESSAGES` of `100` for number of distinct messages (i.e. multiple fragments) in flight for re-assembly.
+
+> TODO considering `MAX_FRAGMENT_SIZE` limit of `250 * 1024` bytes, i.e. `250 kiB`. (Liberal practical choice, given assumption that this predominantly concerns messaging networks.) If messages are dropped during verification, other fragments may still be kept in memory as part of an incomplete message, because fragments may vary in size.
+
+> TODO considering `MAX_MESSAGE_SIZE` limit of `100 * 1024 * 1024` bytes, i.e. `100 MiB`, for fragments in the store. When available fragments of an incomplete message already exceed combined payload of over `MAX_MESSAGE_SIZE`, they will be dropped.
+
+> REMARK fragments are not authenticated, so it isn't possible to avoid malicious use of fragments. Given that messages are authenticated, it is not trivial to inject fake messages into communication. It is, however, possible to: (1) interfere with ability to reassemble fragments of authentic messages, or (2) interfere with client operation by sending extreme fragments to interfere with otr-library, i.e. many many fragments, very large fragments, etc. Issue (1) needs awareness of accounts and message-IDs in flight. Issue (2) simply requires the ability to send fragments to client. This makes (2) very much more available for abuse. (Access from any account on any network to the other party's OTR plugin would be an attack vector for injecting malicious fragments.)
+
 Some networks may have a _maximum message size_ that is too small to contain
 an encoded OTR message. In that event, the sender may choose to split the
 message into a number of fragments. This section describes the format for the
