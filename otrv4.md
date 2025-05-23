@@ -1238,7 +1238,7 @@ generateDH()
 
 ### Shared Secrets
 
-// TODO `k_dh` is not specified as having either minimum-length or fixed-length encoding. for K_ecdh this is obvious because of how `POINT` is defined. In case of `k_dh`, it is encoded as big-endian unsigned integer, without making this explicit. OTRv4 and OTR3 both specify how OTR-encoded MPIs are minimum-length, but `k_dh` is not an OTR-encoded MPI. For otr4j/otrr assumed _minimum-length_.
+> TODO `k_dh` is not specified as having either minimum-length or fixed-length encoding. for K_ecdh this is obvious because of how `POINT` is defined. In case of `k_dh`, it is encoded as big-endian unsigned integer, without making this explicit. OTRv4 and OTR3 both specify how OTR-encoded MPIs are minimum-length, but `k_dh` is not an OTR-encoded MPI. For otr4j/otrr assumed _minimum-length_.
 
 ```
 k_dh:
@@ -1263,6 +1263,8 @@ K:
 ### Generating Shared Secrets
 
 > FIXME Be careful: the check below states `K_ecdh == 0` is error case, but this is probably `K_ecdh == 1`. The `== 0` was for Montgomery notation, however we use Edwards. It must not be equal to the _identity_. (Needs to be double-checked.)
+
+> FIXME there is an alternate issue in that RFC7748 is mentioned, which uses the Montgomery representation. This expresses a point with only the X-coordinate. Consequently, if the below is supposed to be in Montgomery representation, it means that the generated shared secret is different. (Also, under this representation the `== 0` check should be correct.)
 
 ```
 ECDH(a, B)
@@ -3431,7 +3433,7 @@ The decryption mechanism works as:
     * If `message_id` < `k`:
       * This is a duplicated message. Discard the message.
 
-> FIXME below instructions explain to ratchet, but this must be done in a way that can be rolled back. If the message turns out illegal/corrupted/malicious, then the ratchet was not justified.
+> FIXME below instructions explain to ratchet, but this must be done in a way that can be rolled back. If the message turns out illegal/corrupted/malicious, then the ratchet was not justified. (Also concerns stored message-keys during rotation.)
 
 * Given a new ratchet (the 'Public ECDH Key' is different from `their_ecdh` and
   the 'Public DH Key' is different from `their_dh`):
