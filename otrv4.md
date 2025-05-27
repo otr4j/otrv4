@@ -1266,6 +1266,8 @@ K:
 
 > FIXME there is an alternate issue in that RFC7748 is mentioned, which uses the Montgomery representation, i.e. only the encoded X component. Consequently, if the below is supposed to be in Montgomery representation, it means that the generated shared secret is different. (Also, under this representation the `== 0` check should be correct, even if that means it still checks the identity.) However, it is not specified that exactly this method and result from RFC7748 is supposed to be used. The algorithm below expresses point operations and the rest of the specification claims a specific encoding is to be used.
 
+> REMARK the 'Elligator' reference is not explicit mentioned, but is listed below. It was probably a remnant. Given that `K_ecdh` is now mixed with other material and processed with `KDF`, its non-uniformly-random distribution is no longer an immediate issue, i.e. no longer directly exposed.
+
 ```
 ECDH(a, B)
   K_ecdh = a * B
