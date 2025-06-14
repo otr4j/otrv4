@@ -1470,8 +1470,6 @@ an attacker.
 
 ## Client Profile
 
-> REMARK the general idea of the 'client profile' is an inherent risk under assumption of quantum computing: the public exposure of the client profile as a way of offering deniability for "possession implying communication" means that profile must be exposed, however with profile exposed, elliptic curve public keys are exposed and are known/expected to be vulnerable to quantum computing-based attacks.
-
 OTRv4 introduces Client Profiles. A Client Profile has an arbitrary number of
 fields, but some fields are required. A Client Profile contains the Client
 Profile owner instance tag, an Ed448 long-term public key, the Ed448 long-term
