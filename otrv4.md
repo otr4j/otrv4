@@ -993,6 +993,8 @@ Type 1: Disconnected
   participant should do the same. Old mac keys can be attached to this TLV when
   the session is expired. This TLV should have the 'IGNORE_UNREADABLE' flag set.
 
+> REMARK the TLV type 1 "Disconnect" can also carry the `IGNORE_UNREADABLE` flag in OTR version 3, as this change is backward-compatible. Also for version 3, if the Disconnect-message cannot be understood, there is no point in "panicking" over it, as it already lost its intended purpose.
+
 > REMARK this is an unfortunate choice, because type `7` already exists. It would be easier to have 1 semantic for each type, and choose to use only type `7` because we require the semantics for a (possibly empty) question. (I understand reasons for both ways: it _is_ appealing to remove artifacts of previous versions of the protocol.)
 
 Type 2: SMP Message 1
